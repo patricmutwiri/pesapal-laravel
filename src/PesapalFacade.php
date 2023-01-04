@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (c) 2023.
- * @author Patrick Mutwiri on 1/4/23, 11:44 PM
+ * @author Patrick Mutwiri on 1/5/23, 1:03 AM
  * @twitter https://twitter.com/patricmutwiri
  *
  */
@@ -10,9 +10,6 @@ namespace Patricmutwiri\Pesapal;
 
 use Illuminate\Support\Facades\Facade;
 
-/**
- * @see \Patricmutwiri\Pesapal\Skeleton\SkeletonClass
- */
 class PesapalFacade extends Facade
 {
     /**

@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (c) 2023.
- * @author Patrick Mutwiri on 1/4/23, 11:44 PM
+ * @author Patrick Mutwiri on 1/5/23, 1:03 AM
  * @twitter https://twitter.com/patricmutwiri
  *
  */
@@ -21,9 +21,9 @@ class PesapalServiceProvider extends ServiceProvider
          * Optional methods to load your package assets
          */
         // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'pesapal');
-        // $this->loadViewsFrom(__DIR__.'/../resources/views', 'pesapal');
+         $this->loadViewsFrom(__DIR__.'/../resources/views', 'pesapal');
         // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        // $this->loadRoutesFrom(__DIR__.'/routes.php');
+         $this->loadRoutesFrom(__DIR__.'/routes.php');
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
@@ -31,9 +31,9 @@ class PesapalServiceProvider extends ServiceProvider
             ], 'config');
 
             // Publishing the views.
-            /*$this->publishes([
+            $this->publishes([
                 __DIR__.'/../resources/views' => resource_path('views/vendor/pesapal'),
-            ], 'views');*/
+            ], 'views');
 
             // Publishing assets.
             /*$this->publishes([
