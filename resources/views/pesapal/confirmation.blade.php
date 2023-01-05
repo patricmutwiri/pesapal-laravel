@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,10 +18,9 @@
 </head>
 <body>
 
-<div id="app">
+<div id="app" class="col-12">
     <main>
-        @yield('content')
-        <div id="confirmation" class="pesapal confirmation iframe">
+        <div id="confirmation" class="container pesapal confirmation iframe">
             <p>Your Payment has been received. </p>
         </div>
     </main>

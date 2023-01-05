@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,10 +18,9 @@
 </head>
 <body>
 
-<div id="app">
+<div id="app" class="col-12">
     <main>
-        @yield('content')
-        <div id="pay-now" class="pesapal pay-now iframe">
+        <div id="pay-now" class="container pesapal pay-now iframe">
             <iframe src="{{ $redirectURL }}" width="100%" height="700px">
                 <p>Browser unable to load iFrame</p>
             </iframe>
