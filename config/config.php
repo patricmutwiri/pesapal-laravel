@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (c) 2023.
- * @author Patrick Mutwiri on 1/5/23, 10:42 AM
+ * @author Patrick Mutwiri on 1/5/23, 5:26 PM
  * @twitter https://twitter.com/patricmutwiri
  *
  */
@@ -69,5 +69,15 @@ return [
          * Once Pesapal redirect your customer to your callback URL and triggers your IPN URL, you need to check the status of the payment using the OrderTrackingId.
          * */
         'tsq' => env('PESAPAL_TSQ_ENDPOINT', '/api/Transactions/GetTransactionStatus'),
-    ]
+    ],
+
+    /*
+     * The URL to receive IPNs from pesapal.
+     * */
+    'pesapal-ipn' => env('PESAPAL_IPN', config('app.url').'/pesapal/ipn'),
+
+    /*
+     * The URL to receive callback payload from pesapal.
+     * */
+    'pesapal-callback' => env('PESAPAL_CALLBACK', config('app.url').'/pesapal/callback'),
 ];
