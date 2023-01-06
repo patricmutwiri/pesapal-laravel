@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (c) 2023.
- * @author Patrick Mutwiri on 1/5/23, 5:26 PM
+ * @author Patrick Mutwiri on 1/6/23, 8:36 AM
  * @twitter https://twitter.com/patricmutwiri
  *
  */
@@ -49,6 +49,7 @@ class Pesapal
             }
         } else {
             error_log(__METHOD__." token not found. Authenticate. ");
+            $this->authenticate();
         }
         // Init client
         $this->client = new Client([
@@ -109,7 +110,19 @@ class Pesapal
     /*
      * Make a payment request to Pesapal
      * */
-    public function paymentRequest(){}
+    public function paymentRequest($params): ?string
+    {
+        $url = config('pesapal.pesapal-endpoint')['payment-request'];
+        $results = null;
+        try {
+            $response = $this->client->request('POST', $url, ['json' => $params]);
+            $results = $response->getBody()->getContents();
+            error_log(__METHOD__." submit order response : ".$results);
+        } catch (GuzzleException $e){
+            error_log(__METHOD__." exception making a payment request to {$url}. Details ".print_r($e, true));
+        }
+        return $results;
+    }
 
     /*
      * List registered IPN URLs
