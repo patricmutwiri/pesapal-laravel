@@ -21,7 +21,7 @@
 <div id="app" class="col-12">
     <main>
         <div id="pay-now" class="container pesapal pay-now iframe">
-            <iframe src="{{ $redirectURL }}" width="100%" height="700px">
+            <iframe src="{{ $data['redirect_url'] }}" width="100%" height="700px">
                 <p>Browser unable to load iFrame</p>
             </iframe>
         </div>

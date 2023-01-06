@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (c) 2023.
- * @author Patrick Mutwiri on 1/6/23, 8:36 AM
+ * @author Patrick Mutwiri on 1/6/23, 8:53 AM
  * @twitter https://twitter.com/patricmutwiri
  *
  */
@@ -71,9 +71,17 @@ class PesapalController extends Controller
             'orderTrackingId' => $request->get('OrderTrackingId'),
             'orderMerchantReference' => $request->get('OrderMerchantReference'),
         ];
+        $status = null;
         try {
             $results['status'] = 200;
+            // Successful IPN, get TRX status
+            if ($request->get('OrderNotificationType') == "IPNCHANGE") {
+                $pesapal = new Pesapal();
+                $status = $pesapal->transactionStatus($request->get('OrderTrackingId'));
+            }
+            error_log(__METHOD__." transaction status response ".$status);
         } catch (\Exception $e){
+            $results['status'] = 500;
             error_log(__METHOD__." error processing IPN. Details ".print_r($e, true));
         }
         $results = json_encode($results);
@@ -86,12 +94,18 @@ class PesapalController extends Controller
         $orderNotificationType = $request->get('OrderNotificationType');
         $orderTrackingId = $request->get('OrderTrackingId');
         $orderMerchantReference = $request->get('OrderMerchantReference');
+        $data = $request->all();
+        $status = null;
         try {
-            // check trx status
+            // if callback url, get TRX status and go to confirmation page
+            if ($orderNotificationType == "CALLBACKURL") {
+                $pesapal = new Pesapal();
+                $status = $pesapal->transactionStatus($orderTrackingId);
+            }
+            error_log(__METHOD__." trx status {$status}");
         } catch (\Exception $e){
             error_log(__METHOD__." error processing callback. Details ".print_r($e, true));
         }
-        $data = $request->all();
-        return view('pesapal.pay-now', compact('data'));
+        return view('pesapal.confirmation', compact('data', 'status'));
     }
 }
