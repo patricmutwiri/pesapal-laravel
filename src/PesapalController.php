@@ -70,7 +70,7 @@ class PesapalController extends Controller
             'ipn_url' => 'required',
             'ipn_method' => 'required',
         ]);
-        dd($validated);
+        error_log(__METHOD__." validated request ".json_encode($validated));
         $url = $request->ipn_url ?? '';
         $method = $request->ipn_method ?? 'GET';
         try {
