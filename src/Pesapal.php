@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (c) 2023.
- * @author Patrick Mutwiri on 1/7/23, 5:00 PM
+ * @author Patrick Mutwiri on 1/7/23, 5:37 PM
  * @twitter https://twitter.com/patric_mutwiri
  *
  */
@@ -158,4 +158,8 @@ class Pesapal
         }
         return $results;
     }
+
+    private function recordTRX($payload){}
+
+    private function updateDB($payload){}
 }

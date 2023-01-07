@@ -4,7 +4,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/patricmutwiri/pesapal-laravel.svg?style=flat-square)](https://packagist.org/packages/patricmutwiri/pesapal-laravel)
 ![GitHub Actions](https://github.com/patricmutwiri/pesapal-laravel/actions/workflows/main.yml/badge.svg)
 
-This package is meant to help you integrate painlessly with Pesapal. In the end, you can receive payments through Pesapal in your application.  
+This package is meant to help you integrate painlessly with Pesapal. In the end, you can receive payments through Pesapal API v3.0 in your application.
 
 ## Installation
 
