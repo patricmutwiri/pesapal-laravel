@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (c) 2023.
- * @author Patrick Mutwiri on 1/7/23, 3:18 PM
+ * @author Patrick Mutwiri on 1/7/23, 5:00 PM
  * @twitter https://twitter.com/patric_mutwiri
  *
  */
@@ -44,12 +44,7 @@ class Pesapal
             $currentDate = strtotime(date('Y-m-d H:i:s', time()));
             if($tokenExpiry > $currentDate) {
                 $this->headers['Authorization'] = 'Bearer ' .$this->token;
-            } else {
-                error_log(__METHOD__." expired token. Authenticate. ");
             }
-        } else {
-            error_log(__METHOD__." token not found. Authenticate. ");
-            $this->authenticate();
         }
         // Init client
         $this->client = new Client([
@@ -77,13 +72,14 @@ class Pesapal
             error_log(__METHOD__." get token response : ".$results);
             if (!empty($results)){
                 $authRes = $results;
+                $this->headers['Authorization'] = $this->token ?? '';
                 $this->token = $authRes->token ?? '';
                 $this->expires = $authRes->expiryDate ?? '';
             }
         } catch (GuzzleException $e) {
             error_log(__METHOD__." error making request to {$url}. Details ".print_r($e, true));
         }
-        return $results;
+        return $this->token;
     }
 
     /*
@@ -91,6 +87,7 @@ class Pesapal
      * */
     public function IPNRegister(): ?string
     {
+        $this->authenticate();
         $url = config('pesapal.pesapal-endpoint')['ipn-register'];
         $params = array(
             'id' => config('pesapal.pesapal-ipn'),
@@ -112,6 +109,7 @@ class Pesapal
      * */
     public function paymentRequest($params): ?string
     {
+        $this->authenticate();
         $url = config('pesapal.pesapal-endpoint')['payment-request'];
         $results = null;
         try {
@@ -129,6 +127,7 @@ class Pesapal
      * */
     public function IPNList(): ?string
     {
+        $this->authenticate();
         $url = config('pesapal.pesapal-endpoint')['ipn-list'];
         $results = null;
         try {
@@ -146,6 +145,7 @@ class Pesapal
      * */
     public function transactionStatus($id): ?string
     {
+        $this->authenticate();
         $url = config('pesapal.pesapal-endpoint')['tsq'];
         $url .= "?orderTrackingId={$id}";
         $results = null;
