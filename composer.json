@@ -22,7 +22,8 @@
     ],
     "require": {
         "php": "^7.4|^8.0",
-        "guzzlehttp/guzzle": "^7.5"
+        "guzzlehttp/guzzle": "^7.5",
+        "laravel/framework": "^v8.0.0"
     },
     "require-dev": {
         "orchestra/testbench": "^5.3",

@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (c) 2023.
- * @author Patrick Mutwiri on 1/7/23, 3:18 PM
+ * @author Patrick Mutwiri on 1/7/23, 4:28 PM
  * @twitter https://twitter.com/patric_mutwiri
  *
  */
@@ -66,8 +66,8 @@ class PesapalController extends Controller
         $ipns = [];
         try {
             $pesapal = new Pesapal();
-            $results = $pesapal->IPNList();
-            $ipns = json_decode($results);
+            $ipns = $pesapal->IPNList();
+//            $ipns = json_decode($results);
         } catch (\Exception $e){
             error_log(__METHOD__." error loading registered IPNs. Details ".print_r($e, true));
         }
