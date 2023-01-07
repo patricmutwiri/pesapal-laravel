@@ -52,7 +52,6 @@ class Pesapal
             'headers' => $this->headers,
             'verify' => $verify
         ]);
-        error_log(__METHOD__." this element ".print_r($this, true));
     }
 
     /*
@@ -69,7 +68,6 @@ class Pesapal
         try {
             $response = $this->client->request('POST', $url, ['json' => $params]);
             $results = $response->getBody()->getContents();
-            error_log(__METHOD__." get token response : ".$results);
             if (!empty($results)){
                 $authRes = $results;
                 $this->headers['Authorization'] = $this->token ?? '';
@@ -79,6 +77,7 @@ class Pesapal
         } catch (GuzzleException $e) {
             error_log(__METHOD__." error making request to {$url}. Details ".print_r($e, true));
         }
+        error_log(__METHOD__." response : ".$results);
         return $results;
     }
 
@@ -97,10 +96,10 @@ class Pesapal
         try {
             $response = $this->client->request('POST', $url, ['json' => $params]);
             $results = $response->getBody()->getContents();
-            error_log(__METHOD__." ipn registration response : ".$results);
         } catch (GuzzleException $e) {
             error_log(__METHOD__." exception registering IPN URLs at {$url}. Details ".print_r($e, true));
         }
+        error_log(__METHOD__." response : ".$results);
         return $results;
     }
 
@@ -115,10 +114,10 @@ class Pesapal
         try {
             $response = $this->client->request('POST', $url, ['json' => $params]);
             $results = $response->getBody()->getContents();
-            error_log(__METHOD__." submit order response : ".$results);
         } catch (GuzzleException $e){
             error_log(__METHOD__." exception making a payment request to {$url}. Details ".print_r($e, true));
         }
+        error_log(__METHOD__." response : ".$results);
         return $results;
     }
 
@@ -133,10 +132,10 @@ class Pesapal
         try {
             $response = $this->client->request('GET', $url);
             $results = $response->getBody()->getContents();
-            error_log(__METHOD__." ipn urls list response : ".$results);
         } catch (GuzzleException $e) {
             error_log(__METHOD__." exception fetching registered IPN URLs from {$url}. Details ".print_r($e, true));
         }
+        error_log(__METHOD__." response : ".$results);
         return $results;
     }
 
@@ -152,10 +151,10 @@ class Pesapal
         try {
             $response = $this->client->request('GET', $url);
             $results = $response->getBody()->getContents();
-            error_log(__METHOD__." transaction status response : ".$results);
         } catch (GuzzleException $e) {
             error_log(__METHOD__." exception fetching transaction status from {$url}. Details ".print_r($e, true));
         }
+        error_log(__METHOD__." response : ".$results);
         return $results;
     }
 
