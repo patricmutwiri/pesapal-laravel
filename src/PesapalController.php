@@ -74,7 +74,7 @@ class PesapalController extends Controller
         $url = $request->ipn_url ?? '';
         $method = $request->ipn_method ?? 'GET';
         try {
-            $ipn_reg = \Pesapal::IPNRegister();
+            $ipn_reg = \Pesapal::IPNRegister($url, $method);
             error_log(__METHOD__." IPN Register response ".json_encode($ipn_reg));
         } catch(\Exception $e){
             error_log(__METHOD__." error registering IPN URLs. Details ".$e->getMessage());
