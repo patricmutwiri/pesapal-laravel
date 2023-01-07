@@ -17,10 +17,10 @@ class Pesapal
     protected string $key;
     protected string $secret;
     protected string $baseURL;
-    protected string $token=null;
-    protected string $expires=null;
+    protected ?string $token=null;
+    protected string $expires;
     protected Client $client;
-    protected array $headers = [];
+    protected array $headers;
 
     /*
      * Let's bootstrap our class.
