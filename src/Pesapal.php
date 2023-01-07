@@ -93,6 +93,7 @@ class Pesapal
             'id' => $ipn_url,
             'ipn_notification_type' => $method,
         );
+        error_log(__METHOD__." register IPN params ".json_encode($params));
         $results = [];
         try {
             $response = $this->client->request('POST', $url, ['json' => $params, 'headers' => $this->headers]);
