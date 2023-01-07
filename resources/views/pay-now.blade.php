@@ -1,32 +1,15 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Pesapal | Pay Now</title>
-    <meta name="description" content="@yield('meta_description', 'Pesapal for laravel')">
-    <meta name="author" content="@yield('meta_author', 'Patrick Mutwiri')">
-    @yield('meta')
+@extends('frontend.layouts.app')
 
-    @stack('before-styles')
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
-    @stack('after-styles')
-</head>
-<body>
+@section('title', __('Pesapal Pay Now'))
 
-<div id="app" class="col-12">
-    <main>
-        <div id="pay-now" class="container pesapal pay-now iframe">
-            <iframe src="{{ $data['redirect_url'] }}" width="100%" height="700px">
-                <p>Browser unable to load iFrame</p>
-            </iframe>
-        </div>
-    </main>
-</div><!--app-->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-</body>
-</html>
+@section('content')
+    <div id="app" class="col-12">
+        <main>
+            <div id="pay-now" class="container pesapal pay-now iframe">
+                <iframe src="{{ $data['redirect_url'] }}" width="100%" height="700px">
+                    <p>Browser unable to load iFrame</p>
+                </iframe>
+            </div>
+        </main>
+    </div><!--app-->
+@endsection
