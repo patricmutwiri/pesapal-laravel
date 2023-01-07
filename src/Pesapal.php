@@ -13,14 +13,14 @@ use GuzzleHttp\Exception\GuzzleException;
 
 class Pesapal
 {
-    protected string $env;
+    protected string $env="sandbox";
     protected string $key;
     protected string $secret;
     protected string $baseURL;
-    protected string $token;
-    protected string $expires;
+    protected string $token=null;
+    protected string $expires=null;
     protected Client $client;
-    protected array $headers;
+    protected array $headers = [];
 
     /*
      * Let's bootstrap our class.
@@ -79,7 +79,7 @@ class Pesapal
         } catch (GuzzleException $e) {
             error_log(__METHOD__." error making request to {$url}. Details ".print_r($e, true));
         }
-        return $this->token;
+        return $results;
     }
 
     /*
