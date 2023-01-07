@@ -6,8 +6,12 @@
     <div id="app" class="col-12">
         <main>
             <div id="confirmation" class="container pesapal confirmation iframe">
-                <p>Your Payment has been received. </p>
-                <a href="{{ config('app.url', '/') }}">Home</a>
+                @if(!empty($status))
+                    <p>Your Payment has been received. Please wait for confirmation. </p>
+                @else
+                    <p>We're having trouble getting the status of your payment. Please contact support.</p>   
+                @endif
+                <p><a href="{{ config('app.url', '/') }}">Home</a></p>
             </div>
         </main>
     </div><!--app-->

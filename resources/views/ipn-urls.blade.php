@@ -24,9 +24,13 @@
                             <td>{{ $ipn->status }}</td>
                         </tr>
                     @empty
-                        <p>No URLs found!</p>
+                        <tr>
+                            <td colspan="5">No URLs found!</td>
+                        </tr>
                     @endforelse
-                    <p><a href="{{ config('app.url', '/') }}">Home</a></p>
+                    <tr>
+                        <td colspan="5"><p><a href="{{ config('app.url', '/') }}">Home</a></p></td>
+                    </tr>
                 </table>
             </div>
         </main>
