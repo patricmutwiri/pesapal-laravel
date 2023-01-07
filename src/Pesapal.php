@@ -52,6 +52,7 @@ class Pesapal
             'headers' => $this->headers,
             'verify' => $verify
         ]);
+        error_log(__METHOD__." base url ".$this->baseURL);
     }
 
     /*
@@ -60,6 +61,7 @@ class Pesapal
     public function authenticate(): ?string
     {
         $url = config('pesapal.pesapal-endpoint')['auth'];
+        error_log(__METHOD__." request endpoint {$url}");
         $params = array(
             'consumer_key' => $this->key,
             'consumer_secret' => $this->secret,
@@ -88,6 +90,7 @@ class Pesapal
     {
         $this->authenticate();
         $url = config('pesapal.pesapal-endpoint')['ipn-register'];
+        error_log(__METHOD__." request endpoint {$url}");
         $params = array(
             'id' => config('pesapal.pesapal-ipn'),
             'ipn_notification_type' => 'GET',
@@ -110,6 +113,7 @@ class Pesapal
     {
         $this->authenticate();
         $url = config('pesapal.pesapal-endpoint')['payment-request'];
+        error_log(__METHOD__." request endpoint {$url}");
         $results = [];
         try {
             $response = $this->client->request('POST', $url, ['json' => $params]);
@@ -128,6 +132,7 @@ class Pesapal
     {
         $this->authenticate();
         $url = config('pesapal.pesapal-endpoint')['ipn-list'];
+        error_log(__METHOD__." request endpoint {$url}");
         $results = [];
         try {
             $response = $this->client->request('GET', $url);
@@ -147,6 +152,7 @@ class Pesapal
         $this->authenticate();
         $url = config('pesapal.pesapal-endpoint')['tsq'];
         $url .= "?orderTrackingId={$id}";
+        error_log(__METHOD__." request endpoint {$url}");
         $results = [];
         try {
             $response = $this->client->request('GET', $url);
