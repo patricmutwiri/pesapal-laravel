@@ -77,7 +77,7 @@ class Pesapal
         } catch (GuzzleException $e) {
             error_log(__METHOD__." error making request to {$url}. Details ".print_r($e, true));
         }
-        error_log(__METHOD__." response : ".$results);
+        error_log(__METHOD__." response from {$url} : ".$results);
         return $results;
     }
 
@@ -99,7 +99,7 @@ class Pesapal
         } catch (GuzzleException $e) {
             error_log(__METHOD__." exception registering IPN URLs at {$url}. Details ".print_r($e, true));
         }
-        error_log(__METHOD__." response : ".$results);
+        error_log(__METHOD__." response from {$url} : ".$results);
         return $results;
     }
 
@@ -117,7 +117,7 @@ class Pesapal
         } catch (GuzzleException $e){
             error_log(__METHOD__." exception making a payment request to {$url}. Details ".print_r($e, true));
         }
-        error_log(__METHOD__." response : ".$results);
+        error_log(__METHOD__." response from {$url} : ".$results);
         return $results;
     }
 
@@ -135,7 +135,7 @@ class Pesapal
         } catch (GuzzleException $e) {
             error_log(__METHOD__." exception fetching registered IPN URLs from {$url}. Details ".print_r($e, true));
         }
-        error_log(__METHOD__." response : ".$results);
+        error_log(__METHOD__." response from {$url} : ".$results);
         return $results;
     }
 
@@ -154,7 +154,7 @@ class Pesapal
         } catch (GuzzleException $e) {
             error_log(__METHOD__." exception fetching transaction status from {$url}. Details ".print_r($e, true));
         }
-        error_log(__METHOD__." response : ".$results);
+        error_log(__METHOD__." response from {$url} : ".$results);
         return $results;
     }
 
