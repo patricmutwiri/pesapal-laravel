@@ -46,8 +46,7 @@ class PesapalController extends Controller
                     "zip_code" => null
                 ]
             ];
-            $pesapal = new Pesapal();
-            $results = $pesapal->paymentRequest($paymentParams);
+            $results = \Pesapal::paymentRequest($paymentParams);
             error_log(__METHOD__." payment response ".$results);
             $data = [
                 'order_tracking_id' => $results->order_tracking_id ?? null,
@@ -65,8 +64,7 @@ class PesapalController extends Controller
     public function registeredUrls() {
         $ipns = [];
         try {
-            $pesapal = new Pesapal();
-            $ipns = $pesapal->IPNList();
+            $ipns = \Pesapal::IPNList();
 //            $ipns = json_decode($results);
         } catch (\Exception $e){
             error_log(__METHOD__." error loading registered IPNs. Details ".print_r($e, true));
@@ -87,8 +85,7 @@ class PesapalController extends Controller
             $results['status'] = 200;
             // Successful IPN, get TRX status
             if ($request->get('OrderNotificationType') == "IPNCHANGE") {
-                $pesapal = new Pesapal();
-                $status = $pesapal->transactionStatus($request->get('OrderTrackingId'));
+                $status = \Pesapal::transactionStatus($request->get('OrderTrackingId'));
             }
             error_log(__METHOD__." transaction status response ".$status);
         } catch (\Exception $e){
@@ -110,8 +107,7 @@ class PesapalController extends Controller
         try {
             // if callback url, get TRX status and go to confirmation page
             if ($orderNotificationType == "CALLBACKURL") {
-                $pesapal = new Pesapal();
-                $status = $pesapal->transactionStatus($orderTrackingId);
+                $status = \Pesapal::transactionStatus($orderTrackingId);
             }
             error_log(__METHOD__." trx status {$status}");
         } catch (\Exception $e){
