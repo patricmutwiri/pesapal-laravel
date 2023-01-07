@@ -1,9 +1,14 @@
 {
     "name": "patricmutwiri/pesapal",
-    "description": "Payments via pesapal",
+    "description": "Pesapal Laravel Package; Payments via pesapal in laravel made easy. ",
     "keywords": [
         "patricmutwiri",
-        "pesapal"
+        "pesapal",
+        "REST API",
+        "Payments",
+        "Visa",
+        "Mpesa",
+        "card"
     ],
     "homepage": "https://github.com/patricmutwiri/pesapal-laravel",
     "license": "MIT",
@@ -21,7 +26,6 @@
         "illuminate/support": "^8.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^6.0",
         "phpunit/phpunit": "^9.0"
     },
     "autoload": {
