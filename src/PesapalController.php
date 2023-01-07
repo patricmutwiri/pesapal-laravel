@@ -101,14 +101,14 @@ class PesapalController extends Controller
             'orderTrackingId' => $request->get('OrderTrackingId'),
             'orderMerchantReference' => $request->get('OrderMerchantReference'),
         ];
-        $status = null;
+        $status = [];
         try {
             $results['status'] = 200;
             // Successful IPN, get TRX status
             if ($request->get('OrderNotificationType') == "IPNCHANGE") {
                 $status = \Pesapal::transactionStatus($request->get('OrderTrackingId'));
             }
-            error_log(__METHOD__." transaction status response ".$status);
+            error_log(__METHOD__." transaction status response ".json_encode($status));
         } catch (\Exception $e){
             $results['status'] = 500;
             error_log(__METHOD__." error processing IPN. Details ".print_r($e, true));
@@ -124,13 +124,13 @@ class PesapalController extends Controller
         $orderTrackingId = $request->get('OrderTrackingId');
         $orderMerchantReference = $request->get('OrderMerchantReference');
         $data = $request->all();
-        $status = null;
+        $status = [];
         try {
             // if callback url, get TRX status and go to confirmation page
             if ($orderNotificationType == "CALLBACKURL") {
                 $status = \Pesapal::transactionStatus($orderTrackingId);
             }
-            error_log(__METHOD__." trx status {$status}");
+            error_log(__METHOD__." trx status ".json_encode($status));
         } catch (\Exception $e){
             error_log(__METHOD__." error processing callback. Details ".print_r($e, true));
         }
