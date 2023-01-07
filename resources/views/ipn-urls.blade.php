@@ -24,7 +24,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5">No URLs found! Register Default one...</td>
+                            <td colspan="5">No URLs found!</td>
                         </tr>
                     @endforelse
 

@@ -90,7 +90,7 @@ class Pesapal
             $ipn_url = $ipnURL;
         }
         $params = array(
-            'id' => $ipn_url,
+            'url' => $ipn_url,
             'ipn_notification_type' => $method,
         );
         error_log(__METHOD__." register IPN params ".json_encode($params));
