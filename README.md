@@ -1,4 +1,4 @@
-# Pesapal for Laravel
+# Pesapal Package for Laravel Framework
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/patricmutwiri/pesapal-laravel.svg?style=flat-square)](https://packagist.org/packages/patricmutwiri/pesapal-laravel)
 [![Total Downloads](https://img.shields.io/packagist/dt/patricmutwiri/pesapal-laravel.svg?style=flat-square)](https://packagist.org/packages/patricmutwiri/pesapal-laravel)
