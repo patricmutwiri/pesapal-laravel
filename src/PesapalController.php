@@ -84,17 +84,12 @@ class PesapalController extends Controller
 
     public function registeredUrls() {
         $ipns = [];
-        $ipn_reg = [];
         try {
             $ipns = \Pesapal::IPNList();
-            if (empty($ipns)) {
-                error_log(__METHOD__." register configured IPN URL. ".config('pesapal.pesapal-ipn'));
-                $ipn_reg = \Pesapal::IPNRegister();
-            }
         } catch (\Exception $e){
             error_log(__METHOD__." error loading registered IPNs. Details ".print_r($e, true));
         }
-        return view('pesapal.ipn-urls', compact('ipns', 'ipn_reg'));
+        return view('pesapal.ipn-urls', compact('ipns'));
     }
 
     public function ipn(Request $request){
