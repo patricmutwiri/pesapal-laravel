@@ -73,13 +73,14 @@ class PesapalController extends Controller
         error_log(__METHOD__." validated request ".json_encode($validated));
         $url = $request->ipn_url ?? '';
         $method = $request->ipn_method ?? 'GET';
+        $ipn = [];
         try {
-            $ipn_reg = \Pesapal::IPNRegister($url, $method);
-            error_log(__METHOD__." IPN Register response ".json_encode($ipn_reg));
+            $ipn = \Pesapal::IPNRegister($url, $method);
+            error_log(__METHOD__." IPN Register response ".json_encode($ipn));
         } catch(\Exception $e){
             error_log(__METHOD__." error registering IPN URLs. Details ".$e->getMessage());
         }
-        return $this->registeredUrls();
+        return view('pesapal.ipn-url', compact('ipn'));
     }
 
     public function registeredUrls() {
