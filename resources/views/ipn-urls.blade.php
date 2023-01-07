@@ -28,7 +28,8 @@
                         </tr>
                     @endforelse
                     <tr>
-                        <td colspan="5"><p><a href="{{ config('app.url', '/') }}">Home</a></p></td>
+                        <td colspan="3"><p><a href="{{ config('app.url', '/') }}">Home</a></p></td>
+                        <td colspan="2"><p><a href="{{ route('pesapal.ipn.register.view') }}">Register URL</a></p></td>
                     </tr>
                 </table>
             </div>
