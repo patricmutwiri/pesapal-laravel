@@ -61,18 +61,31 @@ class PesapalController extends Controller
         return view('pesapal.pay-now', compact('data'));
     }
 
+    public function registerUrl(Request $request){
+        try {
+            $url = $request->get('ipn_url','');
+            $method = $request->get('ipn_method','GET');
+            $ipn_reg = \Pesapal::IPNRegister();
+            error_log(__METHOD__." IPN Register response ".json_encode($ipn_reg));
+        } catch(\Exception $e){
+            error_log(__METHOD__." error registering IPN URLs. Details ".$e->getMessage());
+        }
+        $this-registeredUrls();
+    }
+
     public function registeredUrls() {
         $ipns = [];
+        $ipn_reg = [];
         try {
             $ipns = \Pesapal::IPNList();
             if (empty($ipns)) {
                 error_log(__METHOD__." register configured IPN URL. ".config('pesapal.pesapal-ipn'));
-                $registerResponse = \Pesapal::IPNRegister();
+                $ipn_reg = \Pesapal::IPNRegister();
             }
         } catch (\Exception $e){
             error_log(__METHOD__." error loading registered IPNs. Details ".print_r($e, true));
         }
-        return view('pesapal.ipn-urls', compact('ipns'));
+        return view('pesapal.ipn-urls', compact('ipns', 'ipn_reg'));
     }
 
     public function ipn(Request $request){

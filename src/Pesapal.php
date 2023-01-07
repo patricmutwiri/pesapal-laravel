@@ -52,7 +52,7 @@ class Pesapal
     /*
      * Get auth token
      * */
-    public function authenticate(): ?string
+    public function authenticate()
     {
         $url = config('pesapal.pesapal-endpoint')['auth'];
         error_log(__METHOD__." request endpoint {$url}");
@@ -80,21 +80,19 @@ class Pesapal
     /*
      * Register IPN url
      * */
-    public function IPNRegister($ipnURL): ?string
+    public function IPNRegister($ipnURL="", $method="GET")
     {
         $this->authenticate();
         $url = config('pesapal.pesapal-endpoint')['ipn-register'];
         error_log(__METHOD__." request endpoint {$url}");
-        $params = array(
-            'id' => config('pesapal.pesapal-ipn'),
-            'ipn_notification_type' => 'GET',
-        );
-        if (!empty($url)) {
-            $params = array(
-                'id' => $ipnURL,
-                'ipn_notification_type' => 'GET',
-            );
+        $ipn_url = config('pesapal.pesapal-ipn');
+        if (!empty($ipnURL)) {
+            $ipn_url = $ipnURL;
         }
+        $params = array(
+            'id' => $ipn_url,
+            'ipn_notification_type' => $method,
+        );
         $results = [];
         try {
             $response = $this->client->request('POST', $url, ['json' => $params, 'headers' => $this->headers]);
@@ -109,7 +107,7 @@ class Pesapal
     /*
      * Make a payment request to Pesapal
      * */
-    public function paymentRequest($params): ?string
+    public function paymentRequest($params)
     {
         $this->authenticate();
         $url = config('pesapal.pesapal-endpoint')['payment-request'];
@@ -147,7 +145,7 @@ class Pesapal
     /*
      * Get transaction status from pesapal using OrderTrackingId
      * */
-    public function transactionStatus($id): ?string
+    public function transactionStatus($id)
     {
         $this->authenticate();
         $url = config('pesapal.pesapal-endpoint')['tsq'];

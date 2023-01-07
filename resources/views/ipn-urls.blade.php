@@ -24,9 +24,23 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5">No URLs found!</td>
+                            <td colspan="5">No URLs found! Register Default one...</td>
                         </tr>
                     @endforelse
+
+                    <!--  check if registered -->
+                    @if(!empty($ipn_reg))
+                        <tr>
+                            <td colspan="5">Default IPN Registered. </td>
+                        </tr>
+                        <tr>
+                            <td>{{ $ipn_reg->url }}</td>
+                            <td>{{ $ipn_reg->created_date }}</td>
+                            <td>{{ $ipn_reg->ipn_id }}</td>
+                            <td>{{ $ipn_reg->error }}</td>
+                            <td>{{ $ipn_reg->status }}</td>
+                        </tr>                    
+                    @endif
                     <tr>
                         <td colspan="5"><p><a href="{{ config('app.url', '/') }}">Home</a></p></td>
                     </tr>
