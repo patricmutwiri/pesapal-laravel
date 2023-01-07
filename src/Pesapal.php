@@ -39,13 +39,7 @@ class Pesapal
             'Content-Type' => 'application/json',
             'debug' => true
         ];
-        if (!empty($this->token)){
-            $tokenExpiry = strtotime(date('Y-m-d H:i:s', strtotime($this->expires) ) );
-            $currentDate = strtotime(date('Y-m-d H:i:s', time()));
-            if($tokenExpiry > $currentDate) {
-                $this->headers['Authorization'] = 'Bearer ' .$this->token;
-            }
-        }
+        
         // Init client
         $this->client = new Client([
             'base_uri' => $this->baseURL,
@@ -68,13 +62,13 @@ class Pesapal
         );
         $results = [];
         try {
-            $response = $this->client->request('POST', $url, ['json' => $params]);
+            $response = $this->client->request('POST', $url, ['json' => $params, 'headers' => $this->headers]);
             $results = $response->getBody()->getContents();
             if (!empty($results)){
                 $authRes = $results;
-                $this->headers['Authorization'] = $this->token ?? '';
                 $this->token = $authRes->token ?? '';
                 $this->expires = $authRes->expiryDate ?? '';
+                $this->headers['Authorization'] = 'Bearer '.$this->token;
             }
         } catch (GuzzleException $e) {
             error_log(__METHOD__." error making request to {$url}. Details ".print_r($e, true));
@@ -97,7 +91,7 @@ class Pesapal
         );
         $results = [];
         try {
-            $response = $this->client->request('POST', $url, ['json' => $params]);
+            $response = $this->client->request('POST', $url, ['json' => $params, 'headers' => $this->headers]);
             $results = $response->getBody()->getContents();
         } catch (GuzzleException $e) {
             error_log(__METHOD__." exception registering IPN URLs at {$url}. Details ".print_r($e, true));
@@ -116,7 +110,7 @@ class Pesapal
         error_log(__METHOD__." request endpoint {$url}");
         $results = [];
         try {
-            $response = $this->client->request('POST', $url, ['json' => $params]);
+            $response = $this->client->request('POST', $url, ['json' => $params, 'headers' => $this->headers]);
             $results = $response->getBody()->getContents();
         } catch (GuzzleException $e){
             error_log(__METHOD__." exception making a payment request to {$url}. Details ".print_r($e, true));
