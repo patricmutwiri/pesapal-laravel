@@ -32,15 +32,10 @@ return [
      * URLs to services depending on environment
      * */
     'pesapal-base' => [
-        'sandbox' => env('PESAPAL_SANDBOX_BASE', 'https://cybqa.pesapal.com'),
-        'production' => env('PESAPAL_PRODUCTION_BASE', 'https://pay.pesapal.com'),
+        'sandbox' => env('PESAPAL_SANDBOX_BASE', 'https://cybqa.pesapal.com/pesapalv3/'),
+        'production' => env('PESAPAL_PRODUCTION_BASE', 'https://pay.pesapal.com/v3/'),
     ],
 
-    /*
-    * Path URL/Endpoint Stub
-    */
-    'stub'  => (config('pesapal.pesapal-env') == "production") ? "/v3" : "/pesapalv3",
-    
     /*
      * Endpoint configurations
      * */
@@ -49,31 +44,31 @@ return [
          * For getting auth token using key and secret
          * Your Pesapal merchant consumer_key and consumer_secret will be used to generate an access token. This access token is valid for a maximum period of 5 minutes. Use this token (sent as a Bearer Token) to access all other Pesapal API 3.0 endpoints.
          * */
-        'auth' => env('PESAPAL_AUTH_ENDPOINT', config('pesapal.stub').'/api/Auth/RequestToken'),
+        'auth' => env('PESAPAL_AUTH_ENDPOINT', 'api/Auth/RequestToken'),
 
         /*
          * For registering the url(s) to be used for receiving IPNs from pesapal
          * It's mandatory to have IPN configured to allow Pesapal to notify your servers when a status changes. It's also important to note that this IPN URL must be publicly available. In cases where you have strict server rules preventing external systems reaching your end, you must then whitelist all calls from our domain (pesapal.com).
          * */
-        'ipn-register' => env('PESAPAL_IPN_REG_ENDPOINT', config('pesapal.stub').'/api/URLSetup/RegisterIPN'),
+        'ipn-register' => env('PESAPAL_IPN_REG_ENDPOINT', 'api/URLSetup/RegisterIPN'),
 
         /*
          * For Listing registered IPN URLs
          * This endpoint allows you to fetch all registered IPN URLs for a particular Pesapal merchant account.
          * */
-        'ipn-list' => env('PESAPAL_IPN_LIST_ENDPOINT', config('pesapal.stub').'/api/URLSetup/GetIpnList'),
+        'ipn-list' => env('PESAPAL_IPN_LIST_ENDPOINT', 'api/URLSetup/GetIpnList'),
 
         /*
          * Making the actual payment/order request to pesapal.
          * Call the SubmitOrderRequest and in return you will get a response which contains a payment redirect URL which you then redirect the customer to or load the URL as an iframe within your site in case you don’t want to redirect the customer off your application.
          * */
-        'payment-request' => env('PESAPAL_PAYMENT_REQ_ENDPOINT', config('pesapal.stub').'/api/Transactions/SubmitOrderRequest'),
+        'payment-request' => env('PESAPAL_PAYMENT_REQ_ENDPOINT', 'api/Transactions/SubmitOrderRequest'),
 
         /*
          * Check the status of a transaction using a given id
          * Once Pesapal redirect your customer to your callback URL and triggers your IPN URL, you need to check the status of the payment using the OrderTrackingId.
          * */
-        'tsq' => env('PESAPAL_TSQ_ENDPOINT', config('pesapal.stub').'/api/Transactions/GetTransactionStatus'),
+        'tsq' => env('PESAPAL_TSQ_ENDPOINT', 'api/Transactions/GetTransactionStatus'),
     ],
 
     /*
