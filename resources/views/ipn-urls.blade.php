@@ -7,7 +7,6 @@
         <main>
             <div id="ipn-urls" class="container pesapal ipn-urls">
                 <table class="table table-striped">
-                    <caption>Registered IPNs</caption>
                     <tr>
                         <th>URL</th>
                         <th>Created At</th>
