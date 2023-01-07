@@ -129,7 +129,7 @@ class Pesapal
         error_log(__METHOD__." request endpoint {$url}");
         $results = [];
         try {
-            $response = $this->client->request('GET', $url);
+            $response = $this->client->request('GET', $url, ['headers' => $this->headers]);
             $results = $response->getBody()->getContents();
         } catch (GuzzleException $e) {
             error_log(__METHOD__." exception fetching registered IPN URLs from {$url}. Details ".print_r($e, true));
@@ -149,7 +149,7 @@ class Pesapal
         error_log(__METHOD__." request endpoint {$url}");
         $results = [];
         try {
-            $response = $this->client->request('GET', $url);
+            $response = $this->client->request('GET', $url, ['headers' => $this->headers]);
             $results = $response->getBody()->getContents();
         } catch (GuzzleException $e) {
             error_log(__METHOD__." exception fetching transaction status from {$url}. Details ".print_r($e, true));
