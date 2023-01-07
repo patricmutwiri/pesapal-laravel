@@ -73,14 +73,14 @@ class Pesapal
         } catch (GuzzleException $e) {
             error_log(__METHOD__." error making request to {$url}. Details ".print_r($e, true));
         }
-        error_log(__METHOD__." response from {$url} : ".$results);
+        error_log(__METHOD__." response from {$url} : ".json_encode($results));
         return $results;
     }
 
     /*
      * Register IPN url
      * */
-    public function IPNRegister(): ?string
+    public function IPNRegister($ipnURL): ?string
     {
         $this->authenticate();
         $url = config('pesapal.pesapal-endpoint')['ipn-register'];
@@ -89,6 +89,12 @@ class Pesapal
             'id' => config('pesapal.pesapal-ipn'),
             'ipn_notification_type' => 'GET',
         );
+        if (!empty($url)) {
+            $params = array(
+                'id' => $ipnURL,
+                'ipn_notification_type' => 'GET',
+            );
+        }
         $results = [];
         try {
             $response = $this->client->request('POST', $url, ['json' => $params, 'headers' => $this->headers]);
@@ -96,7 +102,7 @@ class Pesapal
         } catch (GuzzleException $e) {
             error_log(__METHOD__." exception registering IPN URLs at {$url}. Details ".print_r($e, true));
         }
-        error_log(__METHOD__." response from {$url} : ".$results);
+        error_log(__METHOD__." response from {$url} : ".json_encode($results));
         return $results;
     }
 
@@ -115,14 +121,14 @@ class Pesapal
         } catch (GuzzleException $e){
             error_log(__METHOD__." exception making a payment request to {$url}. Details ".print_r($e, true));
         }
-        error_log(__METHOD__." response from {$url} : ".$results);
+        error_log(__METHOD__." response from {$url} : ".json_encode($results));
         return $results;
     }
 
     /*
      * List registered IPN URLs
      * */
-    public function IPNList(): ?string
+    public function IPNList(): ?array
     {
         $this->authenticate();
         $url = config('pesapal.pesapal-endpoint')['ipn-list'];
@@ -134,7 +140,7 @@ class Pesapal
         } catch (GuzzleException $e) {
             error_log(__METHOD__." exception fetching registered IPN URLs from {$url}. Details ".print_r($e, true));
         }
-        error_log(__METHOD__." response from {$url} : ".$results);
+        error_log(__METHOD__." response from {$url} : ".json_encode($results));
         return $results;
     }
 
@@ -154,7 +160,7 @@ class Pesapal
         } catch (GuzzleException $e) {
             error_log(__METHOD__." exception fetching transaction status from {$url}. Details ".print_r($e, true));
         }
-        error_log(__METHOD__." response from {$url} : ".$results);
+        error_log(__METHOD__." response from {$url} : ".json_encode($results));
         return $results;
     }
 
