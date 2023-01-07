@@ -11,7 +11,7 @@
                     <div class="form-group row">
                         <label for="ipn_url" class="col-md-4 col-form-label text-md-right">@lang('URL')</label>
 
-                        <div class="col-md-6">
+                        <div class="col-md-8">
                             <input type="text" name="ipn_url" id="ipn_url" class="form-control" value="{{ old('ipn_url') }}" placeholder="{{ __('https://patric.xyz/ipns') }}" required autofocus autocomplete="ipn_url" />
                         </div>
                     </div><!--form-group-->
@@ -19,8 +19,12 @@
                     <div class="form-group row">
                         <label for="ipn_method" class="col-md-4 col-form-label text-md-right">@lang('HTTP Method')</label>
 
-                        <div class="col-md-6">
-                            <input type="text" name="ipn_method" id="ipn_method" class="form-control" value="{{ old('ipn_method') }}" placeholder="{{ __('POST') }}" required autofocus autocomplete="ipn_method" />
+                        <div class="col-md-8">
+                            <select name="ipn_method" id="ipn_method" class="form-control" required>
+                                <option>--SELECT--</option>
+                                <option value="GET">GET</option>
+                                <option value="POST">POST</option>
+                            </select>
                         </div>
                     </div><!--form-group-->
 
