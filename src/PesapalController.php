@@ -1,8 +1,8 @@
 <?php
 /*
  * Copyright (c) 2023.
- * @author Patrick Mutwiri on 1/7/23, 2:19 PM
- * @twitter https://twitter.com/patricmutwiri
+ * @author Patrick Mutwiri on 1/7/23, 3:18 PM
+ * @twitter https://twitter.com/patric_mutwiri
  *
  */
 
@@ -60,6 +60,18 @@ class PesapalController extends Controller
             error_log(__METHOD__." error making a payment. Details ".print_r($e, true));
         }
         return view('pesapal.pay-now', compact('data'));
+    }
+
+    public function registeredUrls() {
+        $ipns = [];
+        try {
+            $pesapal = new Pesapal();
+            $results = $pesapal->IPNList();
+            $ipns = json_decode($results);
+        } catch (\Exception $e){
+            error_log(__METHOD__." error loading registered IPNs. Details ".print_r($e, true));
+        }
+        return view('pesapal.ipn-urls', compact('ipns'));
     }
 
     public function ipn(Request $request){

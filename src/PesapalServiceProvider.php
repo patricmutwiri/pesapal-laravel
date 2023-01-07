@@ -1,8 +1,8 @@
 <?php
 /*
  * Copyright (c) 2023.
- * @author Patrick Mutwiri on 1/5/23, 1:03 AM
- * @twitter https://twitter.com/patricmutwiri
+ * @author Patrick Mutwiri on 1/7/23, 3:18 PM
+ * @twitter https://twitter.com/patric_mutwiri
  *
  */
 
@@ -23,7 +23,7 @@ class PesapalServiceProvider extends ServiceProvider
         // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'pesapal');
          $this->loadViewsFrom(__DIR__.'/../resources/views', 'pesapal');
         // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-         $this->loadRoutesFrom(__DIR__.'/routes.php');
+         $this->loadRoutesFrom(__DIR__.'/../routes/routes.php');
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
