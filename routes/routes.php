@@ -21,6 +21,5 @@ Route::get("/pesapal/ipn-register", [PesapalController::class, 'viewRegisterUrl'
 Route::post("/pesapal/ipn-register", [PesapalController::class, 'registerUrl'])
     ->name("pesapal.ipn.register");
 
-
 Route::get("/pesapal/callback", [PesapalController::class, 'callback'])
     ->name("pesapal.callback");
