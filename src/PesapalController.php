@@ -66,9 +66,14 @@ class PesapalController extends Controller
     }
 
     public function registerUrl(Request $request){
+        $validated = $request->validate([
+            'ipn_url' => 'required',
+            'ipn_method' => 'required',
+        ]);
+        dd($validated);
+        $url = $request->ipn_url ?? '';
+        $method = $request->ipn_method ?? 'GET';
         try {
-            $url = $request->get('ipn_url','');
-            $method = $request->get('ipn_method','GET');
             $ipn_reg = \Pesapal::IPNRegister();
             error_log(__METHOD__." IPN Register response ".json_encode($ipn_reg));
         } catch(\Exception $e){
