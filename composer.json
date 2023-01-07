@@ -55,5 +55,7 @@
                 "Pesapal": "Patricmutwiri\\Pesapal\\PesapalFacade"
             }
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
