@@ -63,7 +63,7 @@ class Pesapal
         $results = [];
         try {
             $response = $this->client->request('POST', $url, ['json' => $params, 'headers' => $this->headers]);
-            $results = $response->getBody()->getContents();
+            $results = json_decode($response->getBody()->getContents());
             if (!empty($results)){
                 $authRes = $results;
                 $this->token = $authRes->token ?? '';
@@ -92,7 +92,7 @@ class Pesapal
         $results = [];
         try {
             $response = $this->client->request('POST', $url, ['json' => $params, 'headers' => $this->headers]);
-            $results = $response->getBody()->getContents();
+            $results = json_decode($response->getBody()->getContents());
         } catch (GuzzleException $e) {
             error_log(__METHOD__." exception registering IPN URLs at {$url}. Details ".print_r($e, true));
         }
@@ -111,7 +111,7 @@ class Pesapal
         $results = [];
         try {
             $response = $this->client->request('POST', $url, ['json' => $params, 'headers' => $this->headers]);
-            $results = $response->getBody()->getContents();
+            $results = json_decode($response->getBody()->getContents());
         } catch (GuzzleException $e){
             error_log(__METHOD__." exception making a payment request to {$url}. Details ".print_r($e, true));
         }
@@ -130,7 +130,7 @@ class Pesapal
         $results = [];
         try {
             $response = $this->client->request('GET', $url, ['headers' => $this->headers]);
-            $results = $response->getBody()->getContents();
+            $results = json_decode($response->getBody()->getContents());
         } catch (GuzzleException $e) {
             error_log(__METHOD__." exception fetching registered IPN URLs from {$url}. Details ".print_r($e, true));
         }
@@ -150,7 +150,7 @@ class Pesapal
         $results = [];
         try {
             $response = $this->client->request('GET', $url, ['headers' => $this->headers]);
-            $results = $response->getBody()->getContents();
+            $results = json_decode($response->getBody()->getContents());
         } catch (GuzzleException $e) {
             error_log(__METHOD__." exception fetching transaction status from {$url}. Details ".print_r($e, true));
         }
