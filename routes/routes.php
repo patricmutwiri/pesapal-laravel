@@ -15,8 +15,12 @@ Route::get("/pesapal/ipn", [PesapalController::class, 'ipn'])
 Route::get("/pesapal/ipn-urls", [PesapalController::class, 'registeredUrls'])
     ->name("pesapal.ipn.urls");
 
-Route::get("/pesapal/ipn-register", [PesapalController::class, 'registerUrl'])
-    ->name("pesapal.ipn.register");    
+Route::get("/pesapal/ipn-register", [PesapalController::class, 'viewRegisterUrl'])
+    ->name("pesapal.ipn.register.view");
+    
+Route::post("/pesapal/ipn-register", [PesapalController::class, 'registerUrl'])
+    ->name("pesapal.ipn.register");
+
 
 Route::get("/pesapal/callback", [PesapalController::class, 'callback'])
     ->name("pesapal.callback");

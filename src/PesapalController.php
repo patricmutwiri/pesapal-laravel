@@ -61,6 +61,10 @@ class PesapalController extends Controller
         return view('pesapal.pay-now', compact('data'));
     }
 
+    public function viewRegisterUrl(){
+        return view('pesapal.register-url');
+    }
+
     public function registerUrl(Request $request){
         try {
             $url = $request->get('ipn_url','');
@@ -70,7 +74,7 @@ class PesapalController extends Controller
         } catch(\Exception $e){
             error_log(__METHOD__." error registering IPN URLs. Details ".$e->getMessage());
         }
-        $this-registeredUrls();
+        return $this->registeredUrls();
     }
 
     public function registeredUrls() {
