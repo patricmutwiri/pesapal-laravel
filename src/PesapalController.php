@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (c) 2023.
- * @author Patrick Mutwiri on 1/6/23, 8:53 AM
+ * @author Patrick Mutwiri on 1/7/23, 2:19 PM
  * @twitter https://twitter.com/patricmutwiri
  *
  */
@@ -56,11 +56,10 @@ class PesapalController extends Controller
                 'error' => $results->error ?? null,
                 'status' => $results->status ?? null,
             ];
-            return view('pesapal.pay-now', compact('data'));
         } catch (\Exception $e){
             error_log(__METHOD__." error making a payment. Details ".print_r($e, true));
         }
-        return $results;
+        return view('pesapal.pay-now', compact('data'));
     }
 
     public function ipn(Request $request){
