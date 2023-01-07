@@ -64,7 +64,7 @@ class Pesapal
             'consumer_key' => $this->key,
             'consumer_secret' => $this->secret,
         );
-        $results = null;
+        $results = [];
         try {
             $response = $this->client->request('POST', $url, ['json' => $params]);
             $results = $response->getBody()->getContents();
@@ -92,7 +92,7 @@ class Pesapal
             'id' => config('pesapal.pesapal-ipn'),
             'ipn_notification_type' => 'GET',
         );
-        $results = null;
+        $results = [];
         try {
             $response = $this->client->request('POST', $url, ['json' => $params]);
             $results = $response->getBody()->getContents();
@@ -110,7 +110,7 @@ class Pesapal
     {
         $this->authenticate();
         $url = config('pesapal.pesapal-endpoint')['payment-request'];
-        $results = null;
+        $results = [];
         try {
             $response = $this->client->request('POST', $url, ['json' => $params]);
             $results = $response->getBody()->getContents();
@@ -128,7 +128,7 @@ class Pesapal
     {
         $this->authenticate();
         $url = config('pesapal.pesapal-endpoint')['ipn-list'];
-        $results = null;
+        $results = [];
         try {
             $response = $this->client->request('GET', $url);
             $results = $response->getBody()->getContents();
@@ -147,7 +147,7 @@ class Pesapal
         $this->authenticate();
         $url = config('pesapal.pesapal-endpoint')['tsq'];
         $url .= "?orderTrackingId={$id}";
-        $results = null;
+        $results = [];
         try {
             $response = $this->client->request('GET', $url);
             $results = $response->getBody()->getContents();
