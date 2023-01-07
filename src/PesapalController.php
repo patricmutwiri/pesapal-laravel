@@ -20,6 +20,15 @@ use Illuminate\Http\Request;
 class PesapalController extends Controller
 {
     public function payNow(Request $request){
+        $validated = $request->validate([
+            'amount' => 'required',
+            'ipn_id' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+        ]);
+        error_log(__METHOD__." validated request ".json_encode($validated));
         $results = null;
         $data = [];
         $ref = uniqid()."_".time();
@@ -27,17 +36,17 @@ class PesapalController extends Controller
             $paymentParams = [
                 "id" => $ref,
                 "currency" => config('pesapal.pesapal-currency','KES'),
-                "amount" => $request->get('amount',1),
-                "description" => $request->get('description', "Lexserve Payment {$ref}"),
+                "amount" => $request->amount,
+                "description" => $request->get('description', "LX Payment {$ref}"),
                 "callback_url" => config('pesapal.pesapal-callback'),
-                "notification_id" => $request->get('ipn_id'),
+                "notification_id" => $request->get('ipn_id', 'df280e9e-3d8a-4ec7-8e18-df295e04706f'),
                 "billing_address" => [
                     "email_address" => $request->get('email', 'patwiri@gmail.com'),
-                    "phone_number" => null,
+                    "phone_number" => $request->get('phone', ''),
                     "country_code" => "",
-                    "first_name" => $request->get('first_name', "Patrick"),
+                    "first_name" => $request->get('first_name', 'Patrick'),
                     "middle_name" => "",
-                    "last_name" =>  $request->get('last_name', "Mutwiri"),
+                    "last_name" =>  $request->get('last_name', 'Mutwiri'),
                     "line_1" => "",
                     "line_2" => "",
                     "city" => "",
@@ -47,7 +56,7 @@ class PesapalController extends Controller
                 ]
             ];
             $results = \Pesapal::paymentRequest($paymentParams);
-            error_log(__METHOD__." payment response ".$results);
+            error_log(__METHOD__." payment response ".json_encode($results));
             $data = [
                 'order_tracking_id' => $results->order_tracking_id ?? null,
                 'merchant_reference' => $results->merchant_reference ?? null,

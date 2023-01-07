@@ -9,6 +9,9 @@
 use Illuminate\Support\Facades\Route;
 use Patricmutwiri\Pesapal\PesapalController;
 
+Route::post("/pesapal/pay", [PesapalController::class, 'payNow'])
+    ->name("pesapal.pay.now");
+
 Route::get("/pesapal/ipn", [PesapalController::class, 'ipn'])
     ->name("pesapal.ipn");
 
