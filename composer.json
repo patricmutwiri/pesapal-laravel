@@ -1,6 +1,5 @@
 {
     "name": "patricmutwiri/pesapal",
-    "author": "Patrick Mutwiri",
     "description": "Pesapal Laravel Package; Payments via pesapal in laravel made easy. ",
     "keywords": [
         "patricmutwiri",
@@ -26,6 +25,7 @@
         "guzzlehttp/guzzle": "^7.5"
     },
     "require-dev": {
+        "orchestra/testbench": "^5.3",
         "phpunit/phpunit": "^9.0"
     },
     "autoload": {
