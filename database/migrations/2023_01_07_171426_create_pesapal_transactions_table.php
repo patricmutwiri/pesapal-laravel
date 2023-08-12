@@ -25,11 +25,11 @@ class CreatePesapalTransactionsTable extends Migration
             $table->string('payment_method')->nullable();
             $table->string('order_tracking_id')->nullable();
             $table->string('merchant_reference')->nullable();
-            $table->text('redirect_url')->nullable();
-            $table->text('notes')->default('Request Received at '.date('Y-m-d H:i:s'));
-            $table->text('confirmation_code')->nullable();
-            $table->text('payment_status_description')->nullable();
-            $table->text('description')->nullable();
+            $table->string('redirect_url')->nullable();
+            $table->string('notes')->nullable();
+            $table->string('confirmation_code')->nullable();
+            $table->string('payment_status_description')->nullable();
+            $table->string('description')->nullable();
             $table->string('reference')->default('0');
             $table->string('amount')->default('0');
             $table->string('currency')->default('KES');
@@ -37,7 +37,6 @@ class CreatePesapalTransactionsTable extends Migration
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->string('narration')->default('Pesapal TRX');
-            $table->string('ipn_id')->nullable();
             $table->string('ipn_id')->nullable();
             $table->string('added_by')->default('0');
             $table->timestamps();
