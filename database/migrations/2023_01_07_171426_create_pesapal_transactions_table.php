@@ -25,15 +25,19 @@ class CreatePesapalTransactionsTable extends Migration
             $table->string('payment_method')->nullable();
             $table->string('order_tracking_id')->nullable();
             $table->string('merchant_reference')->nullable();
+            $table->string('payment_status_code')->nullable();
             $table->string('redirect_url')->nullable();
             $table->string('notes')->nullable();
             $table->string('confirmation_code')->nullable();
             $table->string('payment_status_description')->nullable();
             $table->string('description')->nullable();
+            $table->string('message')->nullable();
+            $table->string('payment_account')->nullable();
             $table->string('reference')->default('0');
             $table->string('amount')->default('0');
             $table->string('currency')->default('KES');
             $table->string('status')->default('NEW');
+            $table->string('trx_status_code')->nullable();
             $table->string('status_code')->nullable();
             $table->string('errors')->nullable();
             $table->string('email')->nullable();
@@ -43,6 +47,7 @@ class CreatePesapalTransactionsTable extends Migration
             $table->string('narration')->default('Pesapal TRX');
             $table->string('ipn_id')->nullable();
             $table->string('added_by')->default('0');
+            $table->string('created_date')->nullable();
             $table->timestamps();
         });
     }

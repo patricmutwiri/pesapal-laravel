@@ -106,21 +106,17 @@ class PesapalController extends Controller
         error_log(__METHOD__." IPN hit. Details ".print_r($request->all(), true));
         //{"orderNotificationType":"IPNCHANGE","orderTrackingId":"d0fa69d6-f3cd-433b-858e-df86555b86c8","orderMerchantReference":"1515111111","status":200}
         $results = [
-            'orderNotificationType' => $request->get('OrderNotificationType'),
-            'orderTrackingId' => $request->get('OrderTrackingId'),
-            'orderMerchantReference' => $request->get('OrderMerchantReference'),
+            'orderNotificationType' => $request->get('OrderNotificationType', ''),
+            'orderTrackingId' => $request->get('OrderTrackingId', ''),
+            'orderMerchantReference' => $request->get('OrderMerchantReference', ''),
+            'status' => $request->get('status', '200'),
         ];
         $status = [];
         try {
-            $results['status'] = 200;
-            // Successful IPN, get TRX status
-            if ($request->get('OrderNotificationType') == "IPNCHANGE") {
-                $status = \Pesapal::transactionStatus($request->get('OrderTrackingId'));
-            }
-            error_log(__METHOD__." transaction status response ".json_encode($status));
+            $status = \Pesapal::transactionStatus($results['OrderTrackingId']);
         } catch (\Exception $e){
             $results['status'] = 500;
-            error_log(__METHOD__." error processing IPN. Details ".print_r($e, true));
+            error_log(__METHOD__." error processing IPN. Error ".$e->getMessage());
         }
         $results = json_encode($results);
         error_log(__METHOD__." response to give pesapal ".$results);
@@ -135,11 +131,7 @@ class PesapalController extends Controller
         $data = $request->all();
         $status = [];
         try {
-            // if callback url, get TRX status and go to confirmation page
-            if ($orderNotificationType == "CALLBACKURL") {
-                $status = \Pesapal::transactionStatus($orderTrackingId);
-            }
-            error_log(__METHOD__." trx status ".json_encode($status));
+            $status = \Pesapal::transactionStatus($orderTrackingId);
         } catch (\Exception $e){
             error_log(__METHOD__." error processing callback. Details ".print_r($e, true));
         }

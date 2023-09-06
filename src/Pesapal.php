@@ -160,11 +160,11 @@ class Pesapal
         $this->authenticate();
         $url = config('pesapal.pesapal-endpoint')['tsq'];
         $url .= "?orderTrackingId={$id}";
-        error_log(__METHOD__." request endpoint {$url}");
         $results = [];
         try {
             $response = $this->client->request('GET', $url, ['headers' => $this->headers]);
             $results = json_decode($response->getBody()->getContents());
+            self::updateTransactionStatus($id, $results);
         } catch (GuzzleException $e) {
             error_log(__METHOD__." exception fetching transaction status from {$url}. Details ".print_r($e, true));
         }
@@ -176,6 +176,52 @@ class Pesapal
 
     private function updateDB($payload){}
 
+    /*
+     * Update the payment request after status check from Pesapal
+     * */
+    private static function updateTransactionStatus($orderTrackingId, $results) {
+        try {
+            $transactions = DB::select('select * from pesapal_transactions where order_tracking_id = :id', ['id' => $orderTrackingId]);
+            foreach ($transactions as $transaction){
+                switch ($results->status_code) {
+                    case 0:
+                        $status = 'INVALID';
+                        break;
+                    case 1:
+                        $status = 'COMPLETED';
+                        break;
+                    case 2:
+                        $status = 'FAILED';
+                        break;
+                    case 3:
+                        $status = 'REVERSED';
+                        break;
+                    default:
+                        $status = 'PROCESSING';
+                }
+                $notes =  sprintf("%s#%s", $transaction->notes, $results->description);
+                $description =  sprintf("%s#%s", $transaction->description, $results->message);
+                $toUpdate = array(
+                    'payment_method' => $results->payment_method ?? '',
+                    'notes' => $notes,
+                    'created_date' => $results->created_date,
+                    'payment_account' => $results->payment_account,
+                    'confirmation_code' => $results->confirmation_code,
+                    'payment_status_description' => $results->payment_status_description,
+                    'description' => $description,
+                    'status' => $status,
+                    'status_code' => $results->status,
+                    'trx_status_code' => $results->status_code,
+                    'payment_status_code' => $results->payment_status_code,
+                );
+                DB::table('pesapal_transactions')
+                    ->where('id', $transaction->id)
+                    ->update($toUpdate);
+            }
+        } catch (\Exception $e){
+            error_log(__METHOD__.' exception updating transaction status! Error: '.$e->getMessage());
+        }
+    }
     /*
     * Update payment request after posting with status from Pesapal
     * */
@@ -200,7 +246,7 @@ class Pesapal
                 ->where('id', $id)
                 ->update($toUpdate);
         } catch (\Exception $e){
-            error_log("Error updating payment request " . $e->getMessage());
+            error_log(__METHOD__." exception updating payment request " . $e->getMessage());
         }
     }
 
@@ -232,11 +278,11 @@ class Pesapal
              'ipn_id' => $data['notification_id'],
              'added_by' => auth()->user()->id ?? 0,
          );
-         error_log("Save payment request ".json_encode($toSave));
+         error_log(__METHOD__." save payment request ".json_encode($toSave));
          try {
              $record_id = DB::table('pesapal_transactions')->insertGetId($toSave);
          } catch (\Exception $e) {
-             error_log("Error saving payment request " . $e->getMessage());
+             error_log(__METHOD__." error saving payment request " . $e->getMessage());
          }
          return $record_id;
      }
