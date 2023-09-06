@@ -13,11 +13,11 @@ use GuzzleHttp\Exception\GuzzleException;
 
 class Pesapal
 {
-    protected string $env = "sandbox";
+    protected string $env="sandbox";
     protected string $key;
     protected string $secret;
     protected string $baseURL;
-    protected ?string $token = null;
+    protected ?string $token=null;
     protected string $expires;
     protected Client $client;
     protected array $headers;
@@ -25,11 +25,10 @@ class Pesapal
     /*
      * Let's bootstrap our class.
      * */
-    public function __construct()
-    {
+    public function __construct(){
         $verify = false;
         $this->env = strtolower(config('pesapal.pesapal-env'));
-        if ($this->env == "production") {
+        if ($this->env == "production"){
             $verify = true;
         }
         $this->key = config('pesapal.pesapal-key');
@@ -47,7 +46,7 @@ class Pesapal
             'headers' => $this->headers,
             'verify' => $verify
         ]);
-        error_log(__METHOD__ . " base url " . $this->baseURL);
+        error_log(__METHOD__." base url ".$this->baseURL);
     }
 
     /*
@@ -56,7 +55,7 @@ class Pesapal
     public function authenticate()
     {
         $url = config('pesapal.pesapal-endpoint')['auth'];
-        error_log(__METHOD__ . " request endpoint {$url}");
+        error_log(__METHOD__." request endpoint {$url}");
         $params = array(
             'consumer_key' => $this->key,
             'consumer_secret' => $this->secret,
@@ -65,27 +64,27 @@ class Pesapal
         try {
             $response = $this->client->request('POST', $url, ['json' => $params, 'headers' => $this->headers]);
             $results = json_decode($response->getBody()->getContents());
-            if (!empty($results)) {
+            if (!empty($results)){
                 $authRes = $results;
                 $this->token = $authRes->token ?? '';
                 $this->expires = $authRes->expiryDate ?? '';
-                $this->headers['Authorization'] = 'Bearer ' . $this->token;
+                $this->headers['Authorization'] = 'Bearer '.$this->token;
             }
         } catch (GuzzleException $e) {
-            error_log(__METHOD__ . " error making request to {$url}. Details " . print_r($e, true));
+            error_log(__METHOD__." error making request to {$url}. Details ".print_r($e, true));
         }
-        error_log(__METHOD__ . " response from {$url} : " . json_encode($results));
+        error_log(__METHOD__." response from {$url} : ".json_encode($results));
         return $results;
     }
 
     /*
      * Register IPN url
      * */
-    public function IPNRegister($ipnURL = "", $method = "GET")
+    public function IPNRegister($ipnURL="", $method="GET")
     {
         $this->authenticate();
         $url = config('pesapal.pesapal-endpoint')['ipn-register'];
-        error_log(__METHOD__ . " request endpoint {$url}");
+        error_log(__METHOD__." request endpoint {$url}");
         $ipn_url = config('pesapal.pesapal-ipn');
         if (!empty($ipnURL)) {
             $ipn_url = $ipnURL;
@@ -94,15 +93,15 @@ class Pesapal
             'url' => $ipn_url,
             'ipn_notification_type' => $method,
         );
-        error_log(__METHOD__ . " register IPN params " . json_encode($params));
+        error_log(__METHOD__." register IPN params ".json_encode($params));
         $results = [];
         try {
             $response = $this->client->request('POST', $url, ['json' => $params, 'headers' => $this->headers]);
             $results = json_decode($response->getBody()->getContents());
         } catch (GuzzleException $e) {
-            error_log(__METHOD__ . " exception registering IPN URLs at {$url}. Details " . print_r($e, true));
+            error_log(__METHOD__." exception registering IPN URLs at {$url}. Details ".print_r($e, true));
         }
-        error_log(__METHOD__ . " response from {$url} : " . json_encode($results));
+        error_log(__METHOD__." response from {$url} : ".json_encode($results));
         return $results;
     }
 
@@ -113,15 +112,15 @@ class Pesapal
     {
         $this->authenticate();
         $url = config('pesapal.pesapal-endpoint')['payment-request'];
-        error_log(__METHOD__ . " request endpoint {$url}");
+        error_log(__METHOD__." request endpoint {$url}");
         $results = [];
         try {
             $response = $this->client->request('POST', $url, ['json' => $params, 'headers' => $this->headers]);
             $results = json_decode($response->getBody()->getContents());
-        } catch (GuzzleException $e) {
-            error_log(__METHOD__ . " exception making a payment request to {$url}. Details " . print_r($e, true));
+        } catch (GuzzleException $e){
+            error_log(__METHOD__." exception making a payment request to {$url}. Details ".print_r($e, true));
         }
-        error_log(__METHOD__ . " response from {$url} : " . json_encode($results));
+        error_log(__METHOD__." response from {$url} : ".json_encode($results));
         return $results;
     }
 
@@ -132,15 +131,15 @@ class Pesapal
     {
         $this->authenticate();
         $url = config('pesapal.pesapal-endpoint')['ipn-list'];
-        error_log(__METHOD__ . " request endpoint {$url}");
+        error_log(__METHOD__." request endpoint {$url}");
         $results = [];
         try {
             $response = $this->client->request('GET', $url, ['headers' => $this->headers]);
             $results = json_decode($response->getBody()->getContents());
         } catch (GuzzleException $e) {
-            error_log(__METHOD__ . " exception fetching registered IPN URLs from {$url}. Details " . print_r($e, true));
+            error_log(__METHOD__." exception fetching registered IPN URLs from {$url}. Details ".print_r($e, true));
         }
-        error_log(__METHOD__ . " response from {$url} : " . json_encode($results));
+        error_log(__METHOD__." response from {$url} : ".json_encode($results));
         return $results;
     }
 
@@ -152,32 +151,28 @@ class Pesapal
         $this->authenticate();
         $url = config('pesapal.pesapal-endpoint')['tsq'];
         $url .= "?orderTrackingId={$id}";
-        error_log(__METHOD__ . " request endpoint {$url}");
+        error_log(__METHOD__." request endpoint {$url}");
         $results = [];
         try {
             $response = $this->client->request('GET', $url, ['headers' => $this->headers]);
             $results = json_decode($response->getBody()->getContents());
         } catch (GuzzleException $e) {
-            error_log(__METHOD__ . " exception fetching transaction status from {$url}. Details " . print_r($e, true));
+            error_log(__METHOD__." exception fetching transaction status from {$url}. Details ".print_r($e, true));
         }
-        error_log(__METHOD__ . " response from {$url} : " . json_encode($results));
+        error_log(__METHOD__." response from {$url} : ".json_encode($results));
         return $results;
     }
 
-    private function recordTRX($payload)
-    {
-    }
+    private function recordTRX($payload){}
 
-    private function updateDB($payload)
-    {
-    }
-
-    public static function savePaymentRequest($data)
-    {
-        try {
-            $pesapalRequest = Pesapal::create($data);
-        } catch (\Exception $e) {
-            \Log::error("Error saving director " . $e->getMessage());
-        }
-    }
+    private function updateDB($payload){}
+                                                                          
+     public static function savePaymentRequest($data)
+     {
+         try {
+             $pesapalRequest = Pesapal::create($data);
+         } catch (\Exception $e) {
+             \Log::error("Error saving director " . $e->getMessage());
+         }
+     }
 }
