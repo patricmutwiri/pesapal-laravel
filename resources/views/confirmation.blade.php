@@ -6,7 +6,7 @@
     <div id="app" class="col-12">
         <main>
             <div id="confirmation" class="container pesapal confirmation iframe">
-                @if(!empty($status))
+                @if(!empty($orderTrackingId))
                     <p>Your Payment has been received. Please wait for confirmation. </p>
                 @else
                     <p>We're having trouble getting the status of your payment. Please contact support.</p>   
