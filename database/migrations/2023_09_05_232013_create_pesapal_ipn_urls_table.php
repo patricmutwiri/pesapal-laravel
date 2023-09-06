@@ -25,6 +25,7 @@ class CreatePesapalIpnUrlsTable extends Migration
             $table->string('url')->nullable();
             $table->string('http_method')->nullable();
             $table->string('created_date')->nullable();
+            $table->string('created_by')->nullable();
             $table->string('status')->nullable();
             $table->string('error')->nullable();
             $table->timestamps();

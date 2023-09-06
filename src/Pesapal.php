@@ -10,6 +10,7 @@ namespace Patricmutwiri\Pesapal;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Support\Facades\DB;
 
 class Pesapal
 {
@@ -39,7 +40,7 @@ class Pesapal
             'Content-Type' => 'application/json',
             'debug' => true
         ];
-        
+
         // Init client
         $this->client = new Client([
             'base_uri' => $this->baseURL,
@@ -50,7 +51,7 @@ class Pesapal
     }
 
     /*
-     * Get auth token
+     * Get authentication token from Pesapal
      * */
     public function authenticate()
     {
@@ -110,17 +111,25 @@ class Pesapal
      * */
     public function paymentRequest($params)
     {
+        $record_id = self::savePaymentRequest($params);
         $this->authenticate();
         $url = config('pesapal.pesapal-endpoint')['payment-request'];
         error_log(__METHOD__." request endpoint {$url}");
         $results = [];
+        $error = null;
         try {
             $response = $this->client->request('POST', $url, ['json' => $params, 'headers' => $this->headers]);
             $results = json_decode($response->getBody()->getContents());
         } catch (GuzzleException $e){
             error_log(__METHOD__." exception making a payment request to {$url}. Details ".print_r($e, true));
+            $error = $e->getMessage();
         }
         error_log(__METHOD__." response from {$url} : ".json_encode($results));
+        try {
+            self::updatePaymentRequest($record_id, $results, $error);
+        } catch (\Exception $e){
+            error_log(__METHOD__." exception updating transaction {$record_id} with results. Error: ".$e->getMessage());
+        }
         return $results;
     }
 
@@ -166,4 +175,69 @@ class Pesapal
     private function recordTRX($payload){}
 
     private function updateDB($payload){}
+
+    /*
+    * Update payment request after posting with status from Pesapal
+    * */
+    private static function updatePaymentRequest($id, $results, $error)
+    {
+        $status = 'PROCESSING';
+        if (!is_null($error) || !is_null($results->error)){
+            $status = 'FAILED';
+        }
+
+        $toUpdate = [
+            'order_tracking_id' => $results->order_tracking_id ?? null,
+            'merchant_reference' => $results->merchant_reference ?? null,
+            'redirect_url' => $results->redirect_url ?? null,
+            'errors' => json_encode($results->error) ?? null,
+            'status_code' => $results->status ?? null,
+            'status' => $status
+        ];
+
+        try {
+            DB::table('pesapal_transactions')
+                ->where('id', $id)
+                ->update($toUpdate);
+        } catch (\Exception $e){
+            error_log("Error updating payment request " . $e->getMessage());
+        }
+    }
+
+    /*
+     * Save payment request for reference.
+     * */
+    public static function savePaymentRequest($data): ?int
+    {
+         $record_id = null;
+         $toSave = array(
+             'our_ref' => $data['id'],
+             'payment_method' => '',
+             'order_tracking_id' => '',
+             'merchant_reference' => '',
+             'redirect_url' => '',
+             'notes' => $data['description'],
+             'confirmation_code' => '',
+             'payment_status_description' => 'NEW Transaction',
+             'description' => $data['description'],
+             'reference' => $data['id'],
+             'amount' => $data['amount'],
+             'currency' => $data['currency'],
+             'status' => 'NEW',
+             'email' => $data['billing_address']['email_address'],
+             'phone' => $data['billing_address']['phone_number'],
+             'first_name' => $data['billing_address']['first_name'],
+             'last_name' => $data['billing_address']['last_name'],
+             'narration' => $data['description'],
+             'ipn_id' => $data['notification_id'],
+             'added_by' => auth()->user()->id ?? 0,
+         );
+         error_log("Save payment request ".json_encode($toSave));
+         try {
+             $record_id = DB::table('pesapal_transactions')->insertGetId($toSave);
+         } catch (\Exception $e) {
+             error_log("Error saving payment request " . $e->getMessage());
+         }
+         return $record_id;
+     }
 }

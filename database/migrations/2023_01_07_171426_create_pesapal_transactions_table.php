@@ -34,8 +34,12 @@ class CreatePesapalTransactionsTable extends Migration
             $table->string('amount')->default('0');
             $table->string('currency')->default('KES');
             $table->string('status')->default('NEW');
+            $table->string('status_code')->nullable();
+            $table->string('errors')->nullable();
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
             $table->string('narration')->default('Pesapal TRX');
             $table->string('ipn_id')->nullable();
             $table->string('added_by')->default('0');

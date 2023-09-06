@@ -143,6 +143,6 @@ class PesapalController extends Controller
         } catch (\Exception $e){
             error_log(__METHOD__." error processing callback. Details ".print_r($e, true));
         }
-        return view('pesapal.confirmation', compact('data', 'status'));
+        return view('pesapal.confirmation', compact('data', 'status','orderTrackingId'));
     }
 }
