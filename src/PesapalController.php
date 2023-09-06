@@ -64,6 +64,8 @@ class PesapalController extends Controller
                 'error' => $results->error ?? null,
                 'status' => $results->status ?? null,
             ];
+            // save request
+            Pesapal::savePaymentRequest($data);
         } catch (\Exception $e){
             error_log(__METHOD__." error making a payment. Details ".print_r($e, true));
         }
@@ -143,6 +145,6 @@ class PesapalController extends Controller
         } catch (\Exception $e){
             error_log(__METHOD__." error processing callback. Details ".print_r($e, true));
         }
-        return view('pesapal.confirmation', compact('data', 'status'));
+        return view('pesapal.confirmation', compact('data', 'status','orderTrackingId'));
     }
 }

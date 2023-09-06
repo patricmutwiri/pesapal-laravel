@@ -39,7 +39,7 @@ class Pesapal
             'Content-Type' => 'application/json',
             'debug' => true
         ];
-        
+
         // Init client
         $this->client = new Client([
             'base_uri' => $this->baseURL,
@@ -166,4 +166,13 @@ class Pesapal
     private function recordTRX($payload){}
 
     private function updateDB($payload){}
+                                                                          
+     public static function savePaymentRequest($data)
+     {
+         try {
+             $pesapalRequest = Pesapal::create($data);
+         } catch (\Exception $e) {
+             \Log::error("Error saving director " . $e->getMessage());
+         }
+     }
 }
