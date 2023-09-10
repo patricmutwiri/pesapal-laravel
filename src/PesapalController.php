@@ -108,7 +108,7 @@ class PesapalController extends Controller
         //{"orderNotificationType":"IPNCHANGE","orderTrackingId":"d0fa69d6-f3cd-433b-858e-df86555b86c8","orderMerchantReference":"1515111111","status":200}
         $results = [
             'orderNotificationType' => $request->get('OrderNotificationType', ''),
-            'orderTrackingId' => $request->get('OrderTrackingId', ''),
+            'OrderTrackingId' => $request->get('OrderTrackingId', ''),
             'orderMerchantReference' => $request->get('OrderMerchantReference', ''),
             'status' => $request->get('status', '200'),
         ];
