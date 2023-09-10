@@ -126,11 +126,7 @@ class Pesapal
             $error = $e->getMessage();
         }
         error_log(__METHOD__." response from {$url} : ".json_encode($results));
-        try {
-            self::updatePaymentRequest($record_id, $results, $error);
-        } catch (\Exception $e){
-            error_log(__METHOD__." exception updating transaction {$record_id} with results. Error: ".$e->getMessage());
-        }
+        self::updatePaymentRequest($record_id, $results, $error);
         return $results;
     }
 
@@ -173,10 +169,6 @@ class Pesapal
         return $results;
     }
 
-    private function recordTRX($payload){}
-
-    private function updateDB($payload){}
-
     /*
      * Update the payment request after status check from Pesapal
      * */
@@ -202,7 +194,7 @@ class Pesapal
                 }
                 $notes =  sprintf("%s#%s", $transaction->notes, $results->description);
                 $description =  sprintf("%s#%s", $transaction->description, $results->message);
-                $toUpdate = array(
+                $toUpdate = [
                     'payment_method' => $results->payment_method ?? '',
                     'notes' => $notes,
                     'created_date' => $results->created_date,
@@ -214,7 +206,7 @@ class Pesapal
                     'status_code' => $results->status,
                     'trx_status_code' => $results->status_code,
                     'payment_status_code' => $results->payment_status_code,
-                );
+                ];
                 DB::table('pesapal_transactions')
                     ->where('id', $transaction->id)
                     ->update($toUpdate);
@@ -228,21 +220,21 @@ class Pesapal
     * */
     private static function updatePaymentRequest($id, $results, $error)
     {
-        $status = 'PROCESSING';
-        if (!is_null($error) || !is_null($results->error)){
-            $status = 'FAILED';
-        }
-
-        $toUpdate = [
-            'order_tracking_id' => $results->order_tracking_id ?? null,
-            'merchant_reference' => $results->merchant_reference ?? null,
-            'redirect_url' => $results->redirect_url ?? null,
-            'errors' => json_encode($results->error) ?? null,
-            'status_code' => $results->status ?? null,
-            'status' => $status
-        ];
-
         try {
+            $status = 'PROCESSING';
+            if (!is_null($error) || !is_null($results->error)){
+                $status = 'FAILED';
+            }
+
+            $toUpdate = [
+                'order_tracking_id' => $results->order_tracking_id ?? null,
+                'merchant_reference' => $results->merchant_reference ?? null,
+                'redirect_url' => $results->redirect_url ?? null,
+                'errors' => json_encode($results->error) ?? null,
+                'status_code' => $results->status ?? null,
+                'status' => $status
+            ];
+
             DB::table('pesapal_transactions')
                 ->where('id', $id)
                 ->update($toUpdate);
@@ -257,7 +249,7 @@ class Pesapal
     public static function savePaymentRequest($data): ?int
     {
          $record_id = null;
-         $toSave = array(
+         $toSave = [
              'our_ref' => $data['id'],
              'payment_method' => '',
              'order_tracking_id' => '',
@@ -278,7 +270,7 @@ class Pesapal
              'narration' => $data['description'],
              'ipn_id' => $data['notification_id'],
              'added_by' => auth()->user()->id ?? 0,
-         );
+         ];
          error_log(__METHOD__." save payment request ".json_encode($toSave));
          try {
              $record_id = DB::table('pesapal_transactions')->insertGetId($toSave);
@@ -293,15 +285,15 @@ class Pesapal
       * */
     public static function saveIPN($params, $results){
         try {
-            $ipn = array(
+            $ipn = [
                 'ipn_id' => $results->ipn_id,
-                'url' => $params['url'],
+                'url' => $results->url ?? $params['url'],
                 'http_method' => $params['ipn_notification_type'],
-                'created_date' => date('Y-m-d H:i:s',time()),
+                'created_date' => $results->created_date ?? date('Y-m-d H:i:s',time()),
                 'created_by' => auth()->user()->id ?? 0,
                 'status' => $results->status,
                 'error' => json_encode($results->error)
-            );
+            ];
             DB::table('pesapal_ipn_urls')->insert($ipn);
         } catch (\Exception $e){
             error_log(__METHOD__." error saving IPN URL " . $e->getMessage());
