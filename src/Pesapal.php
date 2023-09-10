@@ -210,6 +210,8 @@ class Pesapal
                 DB::table('pesapal_transactions')
                     ->where('id', $transaction->id)
                     ->update($toUpdate);
+
+                // todo: Add notification mail
             }
         } catch (\Exception $e){
             error_log(__METHOD__.' exception updating transaction status! Error: '.$e->getMessage());
