@@ -99,6 +99,7 @@ class Pesapal
         try {
             $response = $this->client->request('POST', $url, ['json' => $params, 'headers' => $this->headers]);
             $results = json_decode($response->getBody()->getContents());
+            self::saveIPN($params, $results);
         } catch (GuzzleException $e) {
             error_log(__METHOD__." exception registering IPN URLs at {$url}. Details ".print_r($e, true));
         }
@@ -286,4 +287,24 @@ class Pesapal
          }
          return $record_id;
      }
+
+     /*
+      * Record IPN URL registrations
+      * */
+    public static function saveIPN($params, $results){
+        try {
+            $ipn = array(
+                'ipn_id' => $results->ipn_id,
+                'url' => $params['url'],
+                'http_method' => $params['ipn_notification_type'],
+                'created_date' => date('Y-m-d H:i:s',time()),
+                'created_by' => auth()->user()->id ?? 0,
+                'status' => $results->status,
+                'error' => json_encode($results->error)
+            );
+            DB::table('pesapal_transactions')->insert($ipn);
+        } catch (\Exception $e){
+            error_log(__METHOD__." error saving IPN URL " . $e->getMessage());
+        }
+    }
 }
