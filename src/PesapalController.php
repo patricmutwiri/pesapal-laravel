@@ -112,7 +112,6 @@ class PesapalController extends Controller
             'orderMerchantReference' => $request->get('OrderMerchantReference', ''),
             'status' => $request->get('status', '200'),
         ];
-        $status = [];
         try {
             $status = \Pesapal::transactionStatus($results['OrderTrackingId']);
         } catch (\Exception $e){
