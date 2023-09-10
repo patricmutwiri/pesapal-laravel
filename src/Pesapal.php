@@ -302,7 +302,7 @@ class Pesapal
                 'status' => $results->status,
                 'error' => json_encode($results->error)
             );
-            DB::table('pesapal_transactions')->insert($ipn);
+            DB::table('pesapal_ipn_urls')->insert($ipn);
         } catch (\Exception $e){
             error_log(__METHOD__." error saving IPN URL " . $e->getMessage());
         }
