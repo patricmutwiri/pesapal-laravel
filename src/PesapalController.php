@@ -27,11 +27,12 @@ class PesapalController extends Controller
             'phone' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
+            'id' => 'required'
         ]);
         error_log(__METHOD__." validated request ".json_encode($validated));
         $results = null;
         $data = [];
-        $ref = uniqid()."_".time();
+        $ref = $request->id;
         try {
             $paymentParams = [
                 "id" => $ref,
@@ -65,7 +66,7 @@ class PesapalController extends Controller
                 'status' => $results->status ?? null,
             ];
         } catch (\Exception $e){
-            error_log(__METHOD__." error making a payment. Details ".print_r($e, true));
+            error_log(__METHOD__." error making a payment. Details: ".$e->getMessage());
         }
         return view('pesapal.pay-now', compact('data'));
     }
@@ -133,7 +134,7 @@ class PesapalController extends Controller
         try {
             $status = \Pesapal::transactionStatus($orderTrackingId);
         } catch (\Exception $e){
-            error_log(__METHOD__." error processing callback. Details ".print_r($e, true));
+            error_log(__METHOD__." error processing callback. Details ".$e->getMessage());
         }
         return view('pesapal.confirmation', compact('data', 'status','orderTrackingId'));
     }
