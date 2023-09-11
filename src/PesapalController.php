@@ -40,14 +40,14 @@ class PesapalController extends Controller
                 "amount" => $request->amount,
                 "description" => $request->get('description', "LX Payment {$ref}"),
                 "callback_url" => config('pesapal.pesapal-callback'),
-                "notification_id" => $request->get('ipn_id', 'df280e9e-3d8a-4ec7-8e18-df295e04706f'),
+                "notification_id" => $request->get('ipn_id', ''),
                 "billing_address" => [
-                    "email_address" => $request->get('email', 'patwiri@gmail.com'),
+                    "email_address" => $request->get('email', ''),
                     "phone_number" => $request->get('phone', ''),
                     "country_code" => "",
-                    "first_name" => $request->get('first_name', 'Patrick'),
+                    "first_name" => $request->get('first_name', ''),
                     "middle_name" => "",
-                    "last_name" =>  $request->get('last_name', 'Mutwiri'),
+                    "last_name" =>  $request->get('last_name', ''),
                     "line_1" => "",
                     "line_2" => "",
                     "city" => "",
@@ -105,7 +105,6 @@ class PesapalController extends Controller
 
     public function ipn(Request $request){
         error_log(__METHOD__." IPN hit. Details ".print_r($request->all(), true));
-        //{"orderNotificationType":"IPNCHANGE","orderTrackingId":"d0fa69d6-f3cd-433b-858e-df86555b86c8","orderMerchantReference":"1515111111","status":200}
         $results = [
             'orderNotificationType' => $request->get('OrderNotificationType', ''),
             'OrderTrackingId' => $request->get('OrderTrackingId', ''),
