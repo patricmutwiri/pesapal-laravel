@@ -1,9 +1,24 @@
-@extends('frontend.layouts.app')
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Pesapal | Register IPN</title>
+    <meta name="description" content="@yield('meta_description', 'Pesapal for laravel')">
+    <meta name="author" content="@yield('meta_author', 'Patrick Mutwiri')">
+    @yield('meta')
 
-@section('title', __('Pesapal Register IPN'))
+    @stack('before-styles')
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
+    @stack('after-styles')
+</head>
+<body>
 
-@section('content')
-    <div id="app" class="col-12">
+<div id="app" class="col-12">
         <main>
             <div id="register-url" class="container pesapal register-url">
                 <form action="{{ route('pesapal.ipn.register') }}" method="post" class="col-12">
@@ -35,4 +50,5 @@
             </div>
         </main>
     </div><!--app-->
-@endsection
+</body>
+</html>
