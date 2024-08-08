@@ -1,15 +1,14 @@
 <?php
 /*
- * Copyright (c) 2023.
- * @author Patrick Mutwiri on 1/7/23, 5:37 PM
- * @twitter https://twitter.com/patric_mutwiri
- *
+ * Copyright (c) 2023-2024.
+ * @author Patrick Mutwiri on 8/8/24, 8:51 AM
  */
 
 namespace Patricmutwiri\Pesapal;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class Pesapal
@@ -174,7 +173,7 @@ class Pesapal
      * */
     private static function updateTransactionStatus($orderTrackingId, $results) {
         try {
-            $transactions = DB::select('select * from pesapal_transactions where order_tracking_id = :id', ['id' => $orderTrackingId]);
+            $transactions = DB::table('pesapal_transactions')->where('order_tracking_id', $orderTrackingId)->get();
             foreach ($transactions as $transaction){
                 switch ($results->status_code) {
                     case 0:
@@ -300,5 +299,11 @@ class Pesapal
         } catch (\Exception $e){
             error_log(__METHOD__." error saving IPN URL " . $e->getMessage());
         }
+    }
+
+    public static function payNow(Request $payment)
+    {
+        $paymentController = new PesapalController();
+        return $paymentController->payNow($payment);
     }
 }
