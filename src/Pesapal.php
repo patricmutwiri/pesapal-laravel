@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (c) 2023-2024.
- * @author Patrick Mutwiri on 8/8/24, 8:51 AM
+ * @author Patrick Mutwiri on 8/8/24, 9:18 AM
  */
 
 namespace Patricmutwiri\Pesapal;
@@ -304,6 +304,12 @@ class Pesapal
     public static function payNow(Request $payment)
     {
         $paymentController = new PesapalController();
+        try {
+            $ipn = DB::table('pesapal_ipn_urls')->where('status', '200')->latest('id')->first();
+            $payment->merge(['ipn_id' => $ipn->ipn_id]);
+        } catch (\Exception $e){
+            error_log(__METHOD__." error getting IPN ID " . $e->getMessage());
+        }
         return $paymentController->payNow($payment);
     }
 }
