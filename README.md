@@ -17,7 +17,21 @@ composer require patricmutwiri/pesapal
 ## Usage
 
 ```php
-// Usage description here
+// Load your invoice from DB, like
+$invoice = Invoice::find(1);
+// Then use it below
+$paymentReq = new Request([
+    'amount' => $invoice->balance,
+    'email' => $invoice->user->email,
+    'phone' => $invoice->user->phone,
+    'first_name' => explode(' ', $invoice->user->name)[0],
+    'last_name' => explode(' ', $invoice->user->name)[1],
+    'id' => sprintf("%s-%s", $invoice->invoice_number, date('YmdHis')),
+]);
+
+// you can pass ipn_id above from your DB, or let the service add the latest one for you.
+
+return Pesapal::payNow($paymentReq);
 ```
 
 ### Testing
