@@ -1,9 +1,7 @@
 <?php
 /*
- * Copyright (c) 2023.
- * @author Patrick Mutwiri on 1/7/23, 5:37 PM
- * @twitter https://twitter.com/patric_mutwiri
- *
+ * Copyright (c) 2023-2024.
+ * @author Patrick Mutwiri on 8/9/24, 9:08 PM
  */
 
 namespace Patricmutwiri\Pesapal;
@@ -36,9 +34,9 @@ class PesapalServiceProvider extends ServiceProvider
             ], 'views');
 
             // Publishing assets.
-            $this->publishes([
+/*            $this->publishes([
                 __DIR__.'/../resources/assets' => public_path('vendor/pesapal'),
-            ], 'assets');
+            ], 'assets');*/
 
             // Publishing the translation files.
             /*$this->publishes([
