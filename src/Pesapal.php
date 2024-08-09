@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (c) 2023-2024.
- * @author Patrick Mutwiri on 8/8/24, 9:18 AM
+ * @author Patrick Mutwiri on 8/9/24, 8:03 PM
  */
 
 namespace Patricmutwiri\Pesapal;
@@ -285,6 +285,7 @@ class Pesapal
       * Record IPN URL registrations
       * */
     public static function saveIPN($params, $results){
+        error_log(__METHOD__." saving IPN ");
         try {
             $ipn = [
                 'ipn_id' => $results->ipn_id,
@@ -295,7 +296,8 @@ class Pesapal
                 'status' => $results->status,
                 'error' => json_encode($results->error)
             ];
-            DB::table('pesapal_ipn_urls')->insert($ipn);
+            $id = DB::table('pesapal_ipn_urls')->insertGetId($ipn);
+            error_log(__METHOD__." IPN {$id} saved: ".json_encode($ipn));
         } catch (\Exception $e){
             error_log(__METHOD__." error saving IPN URL " . $e->getMessage());
         }

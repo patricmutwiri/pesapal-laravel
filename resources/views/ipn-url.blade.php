@@ -22,7 +22,6 @@
                         <th>URL</th>
                         <th>Created At</th>
                         <th>IPN ID</th>
-                        <th>Error</th>
                         <th>Status</th>
                     </tr>
                     @if(!empty($ipn))
@@ -30,7 +29,6 @@
                             <td>{{ $ipn->url }}</td>
                             <td>{{ $ipn->created_date }}</td>
                             <td>{{ $ipn->ipn_id }}</td>
-                            <td>{{ @json_encode($ipn->error) }}</td>
                             <td>{{ $ipn->status }}</td>
                         </tr>
                     @else
