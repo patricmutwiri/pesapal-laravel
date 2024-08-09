@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (c) 2023-2024.
- * @author Patrick Mutwiri on 8/9/24, 8:03 PM
+ * @author Patrick Mutwiri on 8/9/24, 8:47 PM
  */
 
 namespace Patricmutwiri\Pesapal;
@@ -294,7 +294,7 @@ class Pesapal
                 'created_date' => $results->created_date ?? date('Y-m-d H:i:s',time()),
                 'created_by' => auth()->user()->id ?? 0,
                 'status' => $results->status,
-                'error' => json_encode($results->error)
+                'error' => ''
             ];
             $id = DB::table('pesapal_ipn_urls')->insertGetId($ipn);
             error_log(__METHOD__." IPN {$id} saved: ".json_encode($ipn));
